@@ -1,4 +1,4 @@
-## 📦 TPB Sorter — Pirate Bay Torrent Sorter
+## 📦 TPBQuality — The Pirate Bay Torrent Sorter
 
 Sorts [The Pirate Bay](https://thepiratebaye.org/) search results automatically by **video quality**, **resolution**, and **uploader status** (VIP / Trusted). Includes **highlighting**, **ranking**, and **dropdown filters**.
 
