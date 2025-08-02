@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "TPBQuality",
+  "version": "1.0",
+  "description": "Sort Pirate Bay torrents by quality",
+  "permissions": ["activeTab", "scripting"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon.png",
+      "64": "icon.png"
+    }
+  },
+  "host_permissions": [
+    "https://thepiratebaye.org/*"
+  ]
+}
