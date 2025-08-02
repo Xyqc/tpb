@@ -82,7 +82,7 @@ Sorts [The Pirate Bay](https://thepiratebaye.org/) search results automatically 
 | `popup.html`                    | Chrome extension popup UI     |
 | `popup.js`                      | Chrome extension script logic |
 | `manifest.json`                 | Chrome extension manifest     |
-| `tpb-sorter.user.js` (optional) | Tampermonkey version          |
+| `TPBQuality-1.0.user.js`        | Tampermonkey version          |
 
 ## Want to provide feedback & contribute?
 
