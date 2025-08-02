@@ -26,7 +26,7 @@ Sorts [The Pirate Bay](https://thepiratebaye.org/) search results automatically 
 2. Open **Chrome** and go to `chrome://extensions`
 3. Enable **Developer Mode**
 4. Click **"Load Unpacked"**
-5. Select the folder containing:
+5. Select the **chrome-extension** folder containing:
 
    * `manifest.json`
    * `popup.html`
