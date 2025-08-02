@@ -46,7 +46,7 @@ Sorts [The Pirate Bay](https://thepiratebaye.org/) search results automatically 
 
 1. Install [Tampermonkey](https://www.tampermonkey.net/) browser extension.
 2. Click **"Create a new script"**
-3. Paste the contents of the `tpb-sorter.user.js` file (provided in this repo).
+3. Paste the contents of the `TPBQuality-1.0.user.js` file (provided in this repo).
 4. Save the script.
 
 ### 🔹 How to Use
@@ -84,6 +84,6 @@ Sorts [The Pirate Bay](https://thepiratebaye.org/) search results automatically 
 | `manifest.json`                 | Chrome extension manifest     |
 | `tpb-sorter.user.js` (optional) | Tampermonkey version          |
 
-## 📬 Feedback & Contributions
+## Want to provide feedback & contribute?
 
-If you'd like to contribute, suggest features, or report bugs, feel free to open an issue or pull request.
+If you'd like to contribute, suggest features, or report bugs, feel free to open an issue or pull request. 😎
