@@ -1,6 +1,6 @@
 ## 📦 TPBQuality — The Pirate Bay Torrent Sorter
 
-Sorts [The Pirate Bay](https://thepiratebaye.org/) search results automatically by **video quality**, **resolution**, and **uploader status** (VIP / Trusted). Includes **highlighting**, **ranking**, and **dropdown filters**.
+Sorts The Pirate Bay search results automatically by **video quality**, **resolution**, and **uploader status** (VIP / Trusted). Includes **highlighting**, **ranking**, and **dropdown filters**.
 
 ### 🔧 Features
 
@@ -35,7 +35,7 @@ Sorts [The Pirate Bay](https://thepiratebaye.org/) search results automatically 
 
 ### 🔹 How to Use
 
-1. Navigate to [https://thepiratebaye.org](https://thepiratebaye.org)
+1. Navigate to the website.
 2. Perform a search (e.g. `Oppenheimer 2023`)
 3. Click the extension icon.
 4. The sorted and filtered list will appear in a popup.
@@ -51,7 +51,7 @@ Sorts [The Pirate Bay](https://thepiratebaye.org/) search results automatically 
 
 ### 🔹 How to Use
 
-1. Go to [https://thepiratebaye.org](https://thepiratebaye.org)
+1. Go to the website.
 2. Perform any search.
 3. A sorted panel will appear **at the top of the page**.
 4. Use dropdowns to filter or re-sort.
