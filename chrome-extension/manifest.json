@@ -8,10 +8,13 @@
     "default_popup": "popup.html",
     "default_icon": {
       "16": "icon.png",
-      "64": "icon.png"
+      "64": "icon.png",
+      "128": "icon.png"
     }
   },
   "host_permissions": [
-    "https://thepiratebaye.org/*"
+    "https://thepiratebaye.org/*",
+    "https://tpbs.pro/*"
   ]
+
 }
