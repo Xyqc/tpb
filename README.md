@@ -1,89 +1,103 @@
-## 📦 TPBQuality — The Pirate Bay Torrent Sorter
+# TPBQuality - The Pirate Bay Torrent Sorter
 
-Sorts The Pirate Bay search results automatically by **video quality**, **resolution**, and **uploader status** (VIP / Trusted). Includes **highlighting**, **ranking**, and **dropdown filters**.
+TPBQuality automatically sorts The Pirate Bay search results based on **video quality**, **resolution**, and **uploader status**.
 
-### 🔧 Features
+It is available as both a **Chrome extension** and a **Tampermonkey userscript**.
 
-* ✅ Automatically sorts search results by:
+## Features
 
-  * Format (e.g. Remux, Blu-ray, x265)
-  * Resolution (e.g. 4K, 1080p, 720p)
-  * VIP and Trusted uploaders
-* 🎨 Visual highlights:
+* Automatically sorts search results by:
 
-  * ⭐ Yellow: Highest ranked
-  * ✅ Green border: VIP
-  * 🔮 Purple border: Trusted
-  * 🔴 Red: Highlighted quality terms (e.g. 1080p, x265)
-* 🔍 Filter dropdown to filter by format (e.g. Remux, CAM, etc.)
-* 🧠 Sort dropdown to prioritize rating, VIPs, or Trusted
+  * Format, such as Remux, Blu-ray, and x265
+  * Resolution, such as 4K, 1080p, and 720p
+  * VIP and Trusted uploader status
+* Highlights results based on quality and uploader status
+* Filter results by format
+* Sort results by:
 
-## 🧩 Chrome Extension
+  * Quality rating
+  * VIP status
+  * Trusted status
+* Supports multiple video formats and resolutions
 
-### 🔹 How to Install
+## Chrome Extension
+
+### Installation
 
 1. Clone or download this repository.
-2. Open **Chrome** and go to `chrome://extensions`
-3. Enable **Developer Mode**
-4. Click **"Load Unpacked"**
-5. Select the **chrome-extension** folder containing:
+2. Open Chrome and navigate to `chrome://extensions`.
+3. Enable **Developer mode**.
+4. Click **Load unpacked**.
+5. Select the `chrome-extension` folder.
+6. Make sure the folder contains:
 
    * `manifest.json`
    * `popup.html`
    * `popup.js`
-6. The extension icon will appear in your toolbar.
 
-### 🔹 How to Use
+The extension will now appear in your Chrome extensions list.
 
-1. Navigate to the website.
-2. Perform a search (e.g. `Oppenheimer 2023`)
-3. Click the extension icon.
-4. The sorted and filtered list will appear in a popup.
+### Usage
 
-## 🐵 Tampermonkey Userscript
+1. Open The Pirate Bay.
+2. Perform a search.
+3. Click the TPBQuality extension icon.
+4. The results will be sorted and filtered in the extension popup.
 
-### 🔹 How to Install
+## Tampermonkey Userscript
 
-1. Install [Tampermonkey](https://www.tampermonkey.net/) browser extension.
-2. Click **"Create a new script"**
-3. Paste the contents of the `TPBQuality-1.0.user.js` file (provided in this repo).
+### Installation
+
+1. Install [Tampermonkey](https://www.tampermonkey.net/).
+2. Open Tampermonkey and create a new script.
+3. Copy the contents of `TPBQuality.user.js` into the script.
 4. Save the script.
 
-### 🔹 How to Use
+### Usage
 
-1. Go to the website.
-2. Perform any search.
-3. A sorted panel will appear **at the top of the page**.
-4. Use dropdowns to filter or re-sort.
+1. Open The Pirate Bay.
+2. Perform a search.
+3. TPBQuality will automatically add a sorted results panel to the top of the page.
+4. Use the dropdown menus to filter and sort the results.
 
-## ⚙️ Quality Ranking (0–10 scale)
+## Quality Ranking
 
-* **Formats**
+TPBQuality uses a 0-10 quality ranking system based on format and resolution.
 
-  * `ISO` – 6
-  * `Remux + Atmos` – 5
-  * `Remux` – 4
-  * `Blu-ray / Hybrid` – 3
-  * `x265 / x264` – 2
-  * `WEB-DL / WEBRip` – 1
-  * `HDTS / TS / CAM / SCR` – 0
-* **Resolutions**
+### Format Ranking
 
-  * `8K` – 4
-  * `4K / 2160p` – 3
-  * `1080p` – 2
-  * `720p` – 1
-  * `576p / 480p` – 0
+| Format                | Score |
+| --------------------- | ----: |
+| ISO                   |     6 |
+| Remux + Atmos         |     5 |
+| Remux                 |     4 |
+| Blu-ray / Hybrid      |     3 |
+| x265 / x264           |     2 |
+| WEB-DL / WEBRip       |     1 |
+| HDTS / TS / CAM / SCR |     0 |
 
-## 📁 Files Included
+### Resolution Ranking
 
-| File                            | Description                   |
-| ------------------------------- | ----------------------------- |
-| `popup.html`                    | Chrome extension popup UI     |
-| `popup.js`                      | Chrome extension script logic |
-| `manifest.json`                 | Chrome extension manifest     |
-| `TPBQuality-1.0.user.js`        | Tampermonkey version          |
+| Resolution  | Score |
+| ----------- | ----: |
+| 8K          |     4 |
+| 4K / 2160p  |     3 |
+| 1080p       |     2 |
+| 720p        |     1 |
+| 576p / 480p |     0 |
 
-## Want to provide feedback & contribute?
+## Files
 
-If you'd like to contribute, suggest features, or report bugs, feel free to open an issue or pull request. 😎
+| File                     | Description               |
+| ------------------------ | ------------------------- |
+| `chrome-extension/`      | Chrome extension files    |
+| `popup.html`             | Extension popup interface |
+| `popup.js`               | Extension logic           |
+| `manifest.json`          | Chrome extension manifest |
+| `TPBQuality-1.0.user.js` | Tampermonkey userscript   |
+
+## Contributing
+
+Contributions, feature suggestions, and bug reports are welcome.
+
+Feel free to open an issue or submit a pull request.
