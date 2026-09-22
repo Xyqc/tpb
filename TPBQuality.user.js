@@ -1,11 +1,11 @@
 // ==UserScript==
 // @name         TPBQuality
 // @namespace    http://tampermonkey.net/
-// @version      1.0
+// @version      1.1
 // @description  Sort Pirate Bay results by quality, resolution, VIP/Trusted; add filter and sort UI
 // @author       Xy
-// @match        https://thepiratebaye.org/*
-// @match        https://tpbs.pro/*
+// @include      /^https?:\/\/[^/]*(?:the)?piratebay[^/]*\.[^/]+(?:\/.*)?$/
+// @include      /^https?:\/\/[^/]*tpbs?[^/]*\.[^/]+(?:\/.*)?$/
 // @icon         https://thepiratebaye.org/favicon.ico
 // @grant        none
 // ==/UserScript==
