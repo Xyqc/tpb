@@ -6,7 +6,6 @@
 // @author       Xy
 // @include      /^https?:\/\/[^/]*(?:the)?piratebay[^/]*\.[^/]+(?:\/.*)?$/
 // @include      /^https?:\/\/[^/]*tpbs?[^/]*\.[^/]+(?:\/.*)?$/
-// @icon         https://thepiratebaye.org/favicon.ico
 // @grant        none
 // @run-at       document-end
 // ==/UserScript==
