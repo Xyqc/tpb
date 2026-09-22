@@ -8,14 +8,21 @@
 // @include      /^https?:\/\/[^/]*tpbs?[^/]*\.[^/]+(?:\/.*)?$/
 // @icon         https://thepiratebaye.org/favicon.ico
 // @grant        none
+// @run-at       document-end
 // ==/UserScript==
 
 (function () {
   'use strict';
 
+  let initialized = false;
+
   const waitForResults = () => {
-    const items = document.querySelectorAll('span.item-title > a');
+    if (initialized) return;
+
+    const items = getTorrentItems();
+
     if (items.length) {
+      initialized = true;
       sortByTitleQuality();
     } else {
       setTimeout(waitForResults, 500);
@@ -24,9 +31,28 @@
 
   waitForResults();
 
+  function getTorrentItems() {
+    const selectors = [
+      'span.item-title > a',
+      'span.list-item.item-name.item-title > a',
+      '.item-title > a',
+      '.item-title a'
+    ];
+
+    for (const selector of selectors) {
+      const items = document.querySelectorAll(selector);
+
+      if (items.length) {
+        return Array.from(items);
+      }
+    }
+
+    return [];
+  }
+
   function sortByTitleQuality() {
     const baseUrl = location.origin;
-    const items = Array.from(document.querySelectorAll('span.item-title > a'));
+    const items = getTorrentItems();
     const torrents = [];
 
     const highlightTerms = [
@@ -38,7 +64,11 @@
 
     for (const a of items) {
       const href = a.getAttribute('href');
-      let rawTitle = a.innerText.trim();
+      if (!href) continue;
+
+      const rawTitle = a.innerText.trim();
+      if (!rawTitle) continue;
+
       let title = rawTitle
         .replace(/[\p{Emoji_Presentation}\p{Extended_Pictographic}]/gu, '')
         .replace(/[^\x20-\x7E]/g, '')
@@ -46,42 +76,83 @@
         .trim();
 
       const lowerTitle = title.toLowerCase();
-      const fullLink = baseUrl + href;
+
+      let fullLink;
+      try {
+        fullLink = new URL(href, location.href).href;
+      } catch {
+        fullLink = baseUrl + href;
+      }
+
       const rank = Math.min(getCombinedRank(lowerTitle), 10);
 
       highlightTerms.forEach(term => {
         const regex = new RegExp(`\\b(${term})\\b`, 'gi');
-        title = title.replace(regex, '<span style="color:red;font-weight:bold;">$1</span>');
+        title = title.replace(
+          regex,
+          '<span style="color:red;font-weight:bold;">$1</span>'
+        );
       });
 
-      let vip = false, trusted = false;
+      let vip = false;
+      let trusted = false;
+
       const parent = a.closest('tr, li, div');
+
       if (parent) {
         const icons = parent.querySelector('span.item-icons');
+
         if (icons) {
-          if (icons.querySelector('img[src="/static/images/vip.gif"][alt="VIP"]')) vip = true;
-          if (icons.querySelector('img[src="/static/images/trusted.png"][alt="Trusted"]')) trusted = true;
+          if (
+            icons.querySelector(
+              'img[src*="/static/images/vip.gif"][alt="VIP"], img[alt="VIP"]'
+            )
+          ) {
+            vip = true;
+          }
+
+          if (
+            icons.querySelector(
+              'img[src*="/static/images/trusted.png"][alt="Trusted"], img[alt="Trusted"]'
+            )
+          ) {
+            trusted = true;
+          }
         }
       }
 
-      torrents.push({ title, link: fullLink, rank, vip, trusted, rawTitle });
+      torrents.push({
+        title,
+        link: fullLink,
+        rank,
+        vip,
+        trusted,
+        rawTitle
+      });
     }
+
+    if (!torrents.length) return;
 
     let existing = document.getElementById("tpb-sorter-container");
     if (existing) existing.remove();
 
     const container = document.createElement("div");
     container.id = "tpb-sorter-container";
-    container.style.backgroundColor = "white";
-    container.style.zIndex = "9999";
-    container.style.overflow = "auto";
-    container.style.padding = "10px";
-    container.style.maxHeight = "90vh";
-    container.style.width = "95%";
-    container.style.margin = "10px auto";
-    container.style.border = "1px solid #ccc";
-    container.style.borderRadius = "8px";
-    container.style.fontFamily = "sans-serif";
+
+    Object.assign(container.style, {
+      backgroundColor: "white",
+      color: "black",
+      zIndex: "9999",
+      overflow: "auto",
+      padding: "10px",
+      maxHeight: "90vh",
+      width: "95%",
+      margin: "10px auto",
+      border: "1px solid #ccc",
+      borderRadius: "8px",
+      fontFamily: "sans-serif",
+      boxSizing: "border-box"
+    });
 
     const titleEl = document.createElement("h2");
     titleEl.textContent = "Removed the stress.";
@@ -95,12 +166,25 @@
     filterLabel.style.fontWeight = "bold";
 
     const filterSelect = document.createElement("select");
-    ["all", "iso", "remux", "hybrid", "x265", "web-dl", "webrip", "bluray", "hdts", "cam"].forEach(opt => {
+
+    [
+      "all",
+      "iso",
+      "remux",
+      "hybrid",
+      "x265",
+      "web-dl",
+      "webrip",
+      "bluray",
+      "hdts",
+      "cam"
+    ].forEach(opt => {
       const o = document.createElement("option");
       o.value = opt;
       o.textContent = opt.toUpperCase();
       filterSelect.appendChild(o);
     });
+
     filterLabel.appendChild(filterSelect);
 
     const sortLabel = document.createElement("label");
@@ -109,47 +193,95 @@
     sortLabel.style.fontWeight = "bold";
 
     const sortSelect = document.createElement("select");
+
     ["rating", "vip", "trusted"].forEach(opt => {
       const o = document.createElement("option");
       o.value = opt;
-      o.textContent = opt.charAt(0).toUpperCase() + opt.slice(1);
+      o.textContent =
+        opt.charAt(0).toUpperCase() + opt.slice(1);
       sortSelect.appendChild(o);
     });
+
     sortLabel.appendChild(sortSelect);
 
     controls.appendChild(filterLabel);
     controls.appendChild(sortLabel);
     container.appendChild(controls);
 
-    function renderResults(filterType = "all", sortMode = "rating") {
-      container.querySelectorAll(".result").forEach(e => e.remove());
+    const resultsContainer = document.createElement("div");
+    resultsContainer.id = "tpb-results";
+    container.appendChild(resultsContainer);
+
+    function renderResults(
+      filterType = "all",
+      sortMode = "rating"
+    ) {
+      resultsContainer.innerHTML = "";
 
       let filtered = torrents.filter(t => {
         if (filterType === "all") return true;
-        return t.rawTitle.toLowerCase().includes(filterType);
+
+        return t.rawTitle
+          .toLowerCase()
+          .includes(filterType.toLowerCase());
       });
 
       if (sortMode === "vip") {
-        filtered.sort((a, b) => (b.vip ? 1 : 0) - (a.vip ? 1 : 0));
+        filtered.sort((a, b) => {
+          if (b.vip !== a.vip) {
+            return Number(b.vip) - Number(a.vip);
+          }
+
+          return b.rank - a.rank;
+        });
       } else if (sortMode === "trusted") {
-        filtered.sort((a, b) => (b.trusted ? 1 : 0) - (a.trusted ? 1 : 0));
+        filtered.sort((a, b) => {
+          if (b.trusted !== a.trusted) {
+            return Number(b.trusted) - Number(a.trusted);
+          }
+
+          return b.rank - a.rank;
+        });
       } else {
-        filtered.sort((a, b) => b.rank - a.rank);
+        filtered.sort((a, b) => {
+          if (b.rank !== a.rank) {
+            return b.rank - a.rank;
+          }
+
+          if (b.vip !== a.vip) {
+            return Number(b.vip) - Number(a.vip);
+          }
+
+          if (b.trusted !== a.trusted) {
+            return Number(b.trusted) - Number(a.trusted);
+          }
+
+          return 0;
+        });
       }
 
-      const highestRank = filtered.length ? filtered[0].rank : 0;
+      const highestRank =
+        filtered.length ? filtered[0].rank : 0;
 
       for (const t of filtered) {
         const el = document.createElement("div");
-        el.className = "result";
-        el.style.padding = "5px 8px";
-        el.style.marginBottom = "6px";
-        el.style.borderRadius = "4px";
-        el.style.border = "2px solid transparent";
 
-        if (t.rank === highestRank && sortMode === "rating") {
+        el.className = "result";
+
+        Object.assign(el.style, {
+          padding: "5px 8px",
+          marginBottom: "6px",
+          borderRadius: "4px",
+          border: "2px solid transparent"
+        });
+
+        if (
+          t.rank === highestRank &&
+          sortMode === "rating"
+        ) {
           el.style.backgroundColor = "yellow";
         }
+
         if (t.vip) {
           el.style.border = "3px solid green";
           el.style.backgroundColor = "#e6ffe6";
@@ -158,19 +290,33 @@
           el.style.backgroundColor = "#f3e6ff";
         }
 
-        el.innerHTML = `<b>${t.rank}/10</b> — <a href="${t.link}" target="_blank">${t.title}</a>`;
-        container.appendChild(el);
+        el.innerHTML =
+          `<b>${t.rank}/10</b> — ` +
+          `<a href="${t.link}" target="_blank">${t.title}</a>`;
+
+        resultsContainer.appendChild(el);
       }
     }
 
     filterSelect.addEventListener("change", () => {
-      renderResults(filterSelect.value, sortSelect.value);
-    });
-    sortSelect.addEventListener("change", () => {
-      renderResults(filterSelect.value, sortSelect.value);
+      renderResults(
+        filterSelect.value,
+        sortSelect.value
+      );
     });
 
-    renderResults();
+    sortSelect.addEventListener("change", () => {
+      renderResults(
+        filterSelect.value,
+        sortSelect.value
+      );
+    });
+
+    renderResults(
+      filterSelect.value,
+      sortSelect.value
+    );
+
     document.body.prepend(container);
 
     function getCombinedRank(name) {
